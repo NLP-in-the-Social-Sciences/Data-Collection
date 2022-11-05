@@ -1,0 +1,19 @@
+#Sort to arrange topics based on priority or similarity. 
+# def Sort(sub_li):
+#     sub_li.sort(key = lambda x: x[1])
+#     sub_li.reverse()
+#     return(sub_li)
+
+for story_num in range(len(stories)): 
+    test_doc = corpus[story_num]
+    vector = lda_model[test_doc]
+    new_vector = Sort(vector)
+    logfile = open('Stories/Topic to Story Relation.txt', 'a')
+    print(f"Story_{story_num} is most similar to {new_vector}", file = logfile)   #last story is most similar with topic
+    logfile.close()
+    
+# for i in range(10):  
+#     Lda_topics = open('Stories/LDA Model Topics.txt', 'a')
+#     print(new_model.show_topics(num_topics=10, num_words=10, formatted=True)[i],"\n", file = Lda_topics)
+# Lda_topics.close()
+#lda_model.print_topics()
