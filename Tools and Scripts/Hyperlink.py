@@ -1,6 +1,8 @@
 ### Source: https://github.com/python-openxml/python-docx/issues/74#issuecomment-261169410
 
 import docx
+from docx.enum.dml import MSO_THEME_COLOR_INDEX
+
 def add_hyperlink(paragraph, url, text, color, underline):
     """
     A function that places a hyperlink within a paragraph object.
