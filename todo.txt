@@ -1,0 +1,2 @@
+-- tokenize and lemmatize the narratives before encoding
+-- 
