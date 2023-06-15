@@ -1,6 +1,7 @@
 Motti and Stephanie
+-- tokenize and lemmatize the narratives before encoding
+-- add Jupyter git dif to repo config
 -- try encoding the narratives instead of the clustered keywords 
 -- play around with filtering percentage to see which one is best
 -- encode the whole 2018 dataset using multiprocessing via gpu (might need CUDA installation)
--- tokenize and lemmatize the narratives before encoding
 -- recreate requirements.txt
