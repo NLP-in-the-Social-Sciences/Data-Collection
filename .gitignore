@@ -1,0 +1,10 @@
+# ignore directories
+.ipynb_checkpoints/
+.vscode/
+venv/
+dataset/ 
+Data Dump/
+Archive/
+
+#ignore files
+local_data.json

@@ -1,0 +1,9 @@
+# files
+*.csv
+*.json
+paths.py
+keys.py
+
+# dircetories
+__pycache__/
+functions/__pycache__/
