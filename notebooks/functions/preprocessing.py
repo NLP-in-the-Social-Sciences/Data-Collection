@@ -51,8 +51,7 @@ def lemmatize(texts: str, allowed_postags=["NOUN", "ADJ", "VERB", "ADV"], accura
                         and not token.is_currency]) # checking all this takes a lot of time
         
         sentece_arr.append(tokens)
-    
-    print("done")
+        
     return " ".join(sentece_arr)
 
 def gen_words(tokens: str):
