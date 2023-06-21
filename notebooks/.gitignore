@@ -3,6 +3,9 @@
 *.json
 paths.py
 keys.py
+*.npy
+!Models/*.npy
+*.ann
 
 # dircetories
 __pycache__/
