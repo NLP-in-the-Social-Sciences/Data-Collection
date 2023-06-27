@@ -10,14 +10,10 @@ nltk.download('stopwords')
 
 stops = set(stopwords.words("english"))
 
-def lemmatize_array(array)-> list: 
-    return [lemmatize(paragraph) for paragraph in tqdm(array)]
-
-
-def lemmatize(texts: str, allowed_postags=["NOUN", "ADJ", "VERB", "ADV"], accuracy = "low") :
+def lemmatize(texts: str, allowed_post_tags=["NOUN", "ADJ", "VERB", "ADV", "PROPN"], accuracy = "low") :
     """
-    :param texts: aragraphs
-    :param allowed_postags: allowed parts of speech
+    :param texts: paragraphs
+    :param allowed_post_tags: allowed parts of speech
     :param accuracy: (optional) accuracy needed from the model 
         return: 
             tokenized and lemmatized texts
@@ -26,23 +22,21 @@ def lemmatize(texts: str, allowed_postags=["NOUN", "ADJ", "VERB", "ADV"], accura
         raise Exception("No input string given.")
     
     if accuracy not in ["low", "high"]:
-        raise Exception("In correct arguemt", accuracy)
+        raise Exception("In correct argument:", accuracy)
     else:
         if accuracy != "high":
             #Use "python -m spacy download en_core_web_sm" in a terminal if error [E050]
             model = spacy.load("en_core_web_sm", disable=["parser","ner"])
-
         else:
             #Use "python -m spacy download 'en_core_web_trf'" in a terminal if error [E050]
-            model = spacy.load('en_core_web_trf', disable=["parser","ner"])
-    
-    text_arr = texts.split(".")[:-1]
-    sentece_arr = []
+            model = spacy.load('en_core_web_md', disable=["parser","ner"])
+    model.add_pipe('sentencizer')
+    sentence_generator = model(texts).sents # create a generator object for sentences in the text
+    sentence_arr = []
 
-    for sentence in text_arr:
-        tokens = model(sentence)
-        tokens = " ".join([token.lemma_ for token in tokens
-                        if token.pos_ in allowed_postags 
+    for sentence in sentence_generator:
+        tokens = " ".join([token.lemma_ for token in sentence
+                        if token.pos_ in allowed_post_tags 
                         and token not in stops
                         and not token.is_punct
                         and not token.like_num
@@ -50,9 +44,9 @@ def lemmatize(texts: str, allowed_postags=["NOUN", "ADJ", "VERB", "ADV"], accura
                         and not token.is_space
                         and not token.is_currency]) # checking all this takes a lot of time
         
-        sentece_arr.append(tokens)
+        sentence_arr.append(tokens)
         
-    return " ".join(sentece_arr)
+    return " ".join(sentence_arr)
 
 def gen_words(tokens: str):
     tokens = " ".join(simple_preprocess(tokens, deacc=True))
