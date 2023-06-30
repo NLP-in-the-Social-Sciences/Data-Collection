@@ -1,8 +1,8 @@
 import nltk
 import spacy
 import numpy as np
-from nltk.corpus import stopwords
 from tqdm import tqdm
+from nltk.corpus import stopwords
 from gensim.utils import simple_preprocess
 from nltk.tokenize import sent_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
