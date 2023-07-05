@@ -5,6 +5,19 @@ venv/
 dataset/ 
 Data Dump/
 Archive/
+__pycache__/
+functions/__pycache__/
 
 #ignore files
 local_data.json
+*.csv
+*.json
+paths.py
+keys.py
+*.npy
+!Models/*.npy
+*.ann
+*.docx
+
+
+
