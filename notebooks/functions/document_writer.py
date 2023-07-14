@@ -24,6 +24,7 @@ def docx_writer(num_people: int, dataframe: DataFrame, output_path = None):
                 doc.add_page_break() 
             except:
                 pass
+            
         if  output_path != None:   
             doc.save(f"{output_path}\file_{index}.docx")
 
