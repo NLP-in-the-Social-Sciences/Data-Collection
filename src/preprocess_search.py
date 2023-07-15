@@ -22,28 +22,34 @@ warnings.filterwarnings('ignore')
 pd.set_option('display.max_colwidth', None)
 
 def load_filter_dump(file_name):
+    if not os.path.isdir(pjoin(DECOMPRESSED_SUMBISSIONS, file_name)): 
+         
+        input_file_path = pjoin(DECOMPRESSED_SUMBISSIONS, file_name)
+        output_file_path = pjoin(DECOMPRESSED_SUMBISSIONS,"csv", file_name.split('.')[0] + ".csv")
 
-    if not os.path.exists(pjoin(DECOMPRESSED_SUMBISSIONS,"csv", file_name.split('.')[0] + ".csv")):
-        print(f"Processing file {file_name}.")
-        chunk_size = 100000
-        df = pd.DataFrame()
-        df_chunk = pd.read_json(os.path.join(DECOMPRESSED_SUMBISSIONS, file_name), lines=True, chunksize=chunk_size)
-        
-        for index, chunk in enumerate(df_chunk):
-            chunk = chunk[["id", "selftext", "title", "subreddit", "permalink", "url"]]
-            chunk = chunk.dropna()
-            chunk = chunk.drop_duplicates(subset=["id"])
-            chunk = chunk[chunk['selftext'].str.len() > 100]
-            chunk["lemmatized_selftext"] = chunk["selftext"].apply(lemmatize)
+        if (not os.path.exists(output_file_path)):
             
-            df = pd.concat([df, chunk])
-        
-        csv_file_name = os.path.join(DECOMPRESSED_SUMBISSIONS, file_name.split('.')[0] + ".csv")
-        df.to_csv(csv_file_name, index=False)
-        
-        print(f"File {file_name} processed.")
-    else: 
-        print(f"File {file_name.split('.')[0]}.csv already exists.")
+                print(f"Processing file {file_name}.")
+
+                chunk_size = 100000
+                df = pd.DataFrame()
+                df_chunk = pd.read_json(input_file_path, lines=True, chunksize=chunk_size)
+                
+                for index, chunk in enumerate(df_chunk):
+                    chunk = chunk[["id", "selftext", "title", "subreddit", "permalink", "url"]]
+                    chunk = chunk.dropna()
+                    chunk = chunk.drop_duplicates(subset=["id"])
+                    chunk = chunk[chunk['selftext'].str.len() > 150]
+                    chunk["lemmatized_selftext"] = chunk["selftext"].apply(lemmatize)
+                    
+                    df = pd.concat([df, chunk])
+
+                if not df.empty: 
+                    df.to_csv(output_file_path, index=False)
+                
+                print(f"File {file_name} processed.")
+        else: 
+            print(f"File {file_name.split('.')[0]}.csv already exists.")
 
 
 def main(): 
@@ -53,11 +59,11 @@ def main():
 
     print("Starting preprocessing of files.")
     
-    with Pool(num_cores) as p:
-        p.map(load_filter_dump, file_list)
+    # with Pool(num_cores) as p:
+    #     p.map(load_filter_dump, file_list)
 
-    # for file in file_list:
-    #     load_filter_dump(file)
+    for file in file_list:
+        load_filter_dump(file)
 
     print(f"Finished preprocessing {len(file_list)} files.")
 
