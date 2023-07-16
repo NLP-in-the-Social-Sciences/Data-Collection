@@ -1,12 +1,16 @@
 import nltk
 import spacy
+import os
 import numpy as np
 from tqdm import tqdm
 from nltk.corpus import stopwords
 from gensim.utils import simple_preprocess
 from nltk.tokenize import sent_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
-nltk.download('stopwords')
+
+stop_path = r"C:\Users\nlplab\AppData\Roaming\nltk_data\corpora\stopwords"
+if not os.path.exists(stop_path):
+    nltk.download('stopwords')
 
 stops = set(stopwords.words("english"))
 
@@ -34,6 +38,8 @@ def lemmatize(texts: str, allowed_post_tags=["NOUN", "ADJ", "VERB", "ADV", "PROP
     model.add_pipe('sentencizer')
     sentence_generator = model(texts).sents # create a generator object for sentences in the text
     sentence_arr = []
+
+    # todo: use nlp.pipe for batch processing: https://ai.stackexchange.com/questions/21946/how-to-make-spacy-lemmatization-process-fast
 
     for sentence in sentence_generator:
         tokens = " ".join([token.lemma_ for token in sentence
