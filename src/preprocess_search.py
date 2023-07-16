@@ -40,11 +40,25 @@ def load_filter_dump(file_name):
                     chunk = chunk.dropna()
                     chunk = chunk.drop_duplicates(subset=["id"])
                     chunk = chunk[chunk['selftext'].str.len() > 150]
-                    chunk["lemmatized_selftext"] = chunk["selftext"].apply(lemmatize)
                     
-                    df = pd.concat([df, chunk])
+                    if chunk.shape[0] > 0: 
+                        num_processes = 10
+                        pool = Pool(processes=num_processes)
+                        
+                        print(f"Started lemmatizing {file_name}.")
+                        results = pool.imap(func=lemmatize,  
+                                            iterable= chunk['selftext'],
+                                            chunksize= (chunk.shape[0] // num_processes))
 
-                if not df.empty: 
+                        pool.close()
+                        pool.join()
+                        
+                        df = pd.concat([df, chunk], ignore_index=False)
+
+                        if index // 10 == 0: 
+                            print(f"Finished chunk {index} of {file_name}.")
+
+                if df.shape[0] > 0: 
                     df.to_csv(output_file_path, index=False)
                 
                 print(f"File {file_name} processed.")
@@ -53,7 +67,7 @@ def load_filter_dump(file_name):
 
 
 def main(): 
-    num_cores = 8
+    num_cores = 6
 
     file_list = os.listdir(DECOMPRESSED_SUMBISSIONS)
 
@@ -62,7 +76,7 @@ def main():
     # with Pool(num_cores) as p:
     #     p.map(load_filter_dump, file_list)
 
-    for file in file_list:
+    for file in file_list: 
         load_filter_dump(file)
 
     print(f"Finished preprocessing {len(file_list)} files.")
