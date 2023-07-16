@@ -45,7 +45,7 @@ def load_filter_dump(file_name):
                         num_processes = 10
                         pool = Pool(processes=num_processes)
                         
-                        print(f"Started lemmatizing {file_name}.")
+                        print(f"Started lemmatizing {file_name} chunk {index}.")
                         results = pool.imap(func=lemmatize,  
                                             iterable= chunk['selftext'],
                                             chunksize= (chunk.shape[0] // num_processes))
@@ -55,7 +55,7 @@ def load_filter_dump(file_name):
                         
                         df = pd.concat([df, chunk], ignore_index=False)
 
-                        if index // 10 == 0: 
+                        if index % 10 == 0: 
                             print(f"Finished chunk {index} of {file_name}.")
 
                 if df.shape[0] > 0: 
