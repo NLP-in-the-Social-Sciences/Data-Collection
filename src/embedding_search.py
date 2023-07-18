@@ -39,7 +39,7 @@ def create_index(embeddings, file_name = None, save_path= None):
     for index_embedding, embed_value in enumerate(embeddings):
         narratives_search_index.add_item(index_embedding, embed_value)
 
-    narratives_search_index.build(n_trees = 20, n_jobs = -1)
+    narratives_search_index.build(n_trees = 20, n_jobs = 4)
 
     if (file_name and save_path):
         output_file_path = pjoin(save_path, file_name.split(".")[0] + ".npy") 
@@ -48,7 +48,11 @@ def create_index(embeddings, file_name = None, save_path= None):
 
     return narratives_search_index
 
-def call_lemmatize(data_series, dataframe):
+def call_lemmatize(data_series, dataframe, file_name = None):
+    if file_name: 
+        print(f"Lemmatization started for {file_name}.")
+    else: 
+        print("Lemmatized started for unnamed file.")
     num_cores = 8
 
     pool = Pool(num_cores)
@@ -59,7 +63,10 @@ def call_lemmatize(data_series, dataframe):
     pool.close()
     pool.join()
 
-    print("Lemmatization complete.")
+    if file_name: 
+        print(f"Lemmatization complete for {file_name}.")
+    else: 
+        print("Lemmatized complete for unnamed file.")
 
     dataframe["lemmatized_selftext"] = np.array(list(results))
 
@@ -86,15 +93,22 @@ def main():
     csv_directory = os.listdir(pjoin(DECOMPRESSED_SUMBISSIONS, "csv"))
 
 
-    for file_name in os.listdir(csv_directory):
-        if (not isdir(pjoin(DECOMPRESSED_SUMBISSIONS, "csv", file_name))):
-            print(f"Processing file {file_name}.")
+    for file_name in csv_directory:
+        file_path = pjoin(DECOMPRESSED_SUMBISSIONS, "csv", file_name)
+        if (not isdir(file_path)):
+            lemmatized_file_path = pjoin(DECOMPRESSED_SUMBISSIONS, "csv", file_name.split(".")[0] + "_lemmatized.csv")
 
-            df = pd.read_csv(pjoin(DECOMPRESSED_SUMBISSIONS, "csv", file_name))
-            call_lemmatize(df["selftext"], df)
-            df.to_csv(pjoin(DECOMPRESSED_SUMBISSIONS, "csv", file_name.split(".") + "_lemmatized" + ".csv"), index=False)
-            
-            print(f"File {file_name} processed.")
+            if not os.path.isfile(lemmatized_file_path):  
+                print(f"Processing file {file_name}.")
 
+                df = pd.read_csv(file_path, usecols=["id", "selftext", "title", "subreddit", "permalink", "url"])
+                call_lemmatize(data_series=df["selftext"], dataframe=df, file_name = file_name)
+                df.to_csv(lemmatized_file_path, index=False)
+                
+                print(f"File {file_name} processed.")
+            else: 
+                print(f"File {file_name} already lemmatized.")
+
+        
 if __name__ == "__main__":
     main()
