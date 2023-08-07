@@ -108,7 +108,7 @@ def main():
 
                 df_chunks= pd.read_csv(file_path, 
                                        usecols= ['id', 'selftext', 'title', 'subreddit', 'permalink', 'url'], 
-                                       chunksize=100_000)    
+                                       chunksize=75_000)    
 
                 # df = pd.read_csv(file_path, usecols=["id", "selftext", "title", "subreddit", "permalink", "url"])
                 chunk_array = []
