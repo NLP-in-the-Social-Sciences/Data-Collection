@@ -10,9 +10,9 @@ from tqdm import tqdm
 from annoy import AnnoyIndex
 from multiprocessing import Pool
 from os.path import join as pjoin
-from json_load_write import load_json_data
+from Archive.json_load_write import load_json_data
 from multiprocessing import Pool, cpu_count
-from preprocessing import lemmatize
+from src.collection_pipeline.utils.preprocessing import lemmatize
 # from ..notebooks.functions.preprocessing import *
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
