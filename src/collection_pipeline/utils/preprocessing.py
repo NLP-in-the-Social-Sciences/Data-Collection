@@ -60,6 +60,10 @@ def gen_words(tokens: str):
     
     return (tokens)
 
+# todo: siddarath
+def filter_global_space():
+    ...
+
 def main(): 
     # test
     paragraph = "In the tranquil meadows of a forgotten countryside, where time seemed to stretch its arms lazily across the horizon, a gentle breeze whispered secrets to the tall grass, swaying it in rhythmic undulations. The sun, ablaze with golden hues, cast its radiant beams upon the idyllic landscape, illuminating every blade of grass and infusing the air with a warm embrace. As the day unfolded, birds soared through the vast expanse of the sky, their wings outstretched in graceful arcs, painting fleeting patterns against the canvas of the heavens. Amidst this picturesque scene, a solitary figure, clad in a flowing cloak of vibrant colors, stood atop a hill, gazing at the panoramic vista that lay before them."

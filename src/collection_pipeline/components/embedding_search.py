@@ -134,6 +134,15 @@ def main():
             else: 
                 logging.info(f"File {file_name} already lemmatized.")
 
+
+            # embed 
+            # create index
+            # save index
+            # save embeddings
+            # search based on queries 
+            # save search results
+                
+
     
 if __name__ == "__main__":
     main()
