@@ -18,6 +18,7 @@ keys.py
 !Models/*.npy
 *.ann
 *.docx
+!subreddits.csv
 
 
 
