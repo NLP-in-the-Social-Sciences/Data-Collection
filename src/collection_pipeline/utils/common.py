@@ -9,5 +9,3 @@ def load_json_data(file: str) -> dict:
 def write_json_data(file: str, data: dict):
     with open (file, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
-
-
