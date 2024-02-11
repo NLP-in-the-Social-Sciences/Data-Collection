@@ -1,8 +1,9 @@
+import argparse
 import numpy as np
+import pandas as pd
 from docx import Document
-from pandas import DataFrame
 
-def docx_writer(num_people: int, dataframe: DataFrame, output_path = None):
+def docx_writer(num_people: int, dataframe: pd.DataFrame, output_path = None):
     """
     num_people: number of people the dataframe is to be divided among
     dataframe: dataframe containing narratives to be evaluated
@@ -33,8 +34,11 @@ def docx_writer(num_people: int, dataframe: DataFrame, output_path = None):
 
 def main(): 
     import pandas as pd 
-
-    results_df = pd.read_csv(r"C:\Users\nlplab\Research\Data-Collection\notebooks\results_tokenized_full.csv")
+    parser = argparse.ArgumentDefaultsHelpFormatter()
+    parser.add_argument("file_path ",type=str)
+    file_path = parser.parse_args()
+    
+    results_df = pd.read_csv(file_path)
     results_df = results_df[1:]
     results_df.reset_index(drop=True)
 
